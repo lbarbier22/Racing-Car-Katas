@@ -4,7 +4,7 @@ public class TelemetryDiagnosticControls
 {
     private final String DiagnosticChannelConnectionString = "*111#";
     
-    private final TelemetryClient telemetryClient;
+    private TelemetryClient telemetryClient;
     private String diagnosticInfo = "";
 
         public TelemetryDiagnosticControls()
@@ -19,8 +19,13 @@ public class TelemetryDiagnosticControls
         public void setDiagnosticInfo(String diagnosticInfo){
             this.diagnosticInfo = diagnosticInfo;
         }
- 
-        public void checkTransmission() throws Exception
+
+        public void setTelemetryClient(TelemetryClient telemetryClient) {
+        this.telemetryClient = telemetryClient;
+    }
+
+
+    public void checkTransmission() throws Exception
         {
             diagnosticInfo = "";
 
