@@ -1,66 +1,56 @@
 package tddmicroexercises.tirepressuremonitoringsystem;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AlarmTest {
 
-    private class TestSensor extends Sensor {
-        private double pressure;
-    
-    public void setPressure(double pressure) {
-            this.pressure = pressure;
-        }
+    @InjectMocks
+    Sensor mockSensor = mock(Sensor.class);
 
-    @Override
-    public double popNextPressurePsiValue() {
-        return pressure;
-       }
+    @Spy
+    Alarm spyAlarm = new Alarm(mockSensor);
+
+    @BeforeEach
+    void init(){
+
     }
-
-    @Test
-    public void foo() {
-        Alarm alarm = new Alarm();
-        assertFalse(alarm.isAlarmOn());
-    }
-
 
     @Test
     void testAlarmOnLowPressure() {
-        TestSensor testSensor = new TestSensor();
-        testSensor.setPressure(16); 
-        Alarm alarm = new Alarm();
-        alarm.sensor = testSensor;
+        //WHEN
+        when(mockSensor.popNextPressurePsiValue()).thenReturn(16.00);
 
-        alarm.check();
-
-        assertTrue(alarm.isAlarmOn());
+        spyAlarm.check();
+        //THEN
+        assertTrue(spyAlarm.isAlarmOn());
     }
 
     @Test
     void testAlarmOnHighPressure() {
-        TestSensor testSensor = new TestSensor();
-        testSensor.setPressure(22); 
-        Alarm alarm = new Alarm();
-        alarm.sensor = testSensor;
+        //WHEN
+        when(mockSensor.popNextPressurePsiValue()).thenReturn(22.00);
 
-        alarm.check();
-
-        assertTrue(alarm.isAlarmOn());
+        spyAlarm.check();
+        //THEN
+        assertTrue(spyAlarm.isAlarmOn());
     }
 
     @Test
     void testAlarmOffForNormalPressure() {
-        TestSensor testSensor = new TestSensor();
-        testSensor.setPressure(18); 
-        Alarm alarm = new Alarm();
-        alarm.sensor = testSensor;
+        //WHEN
+        when(mockSensor.popNextPressurePsiValue()).thenReturn(18.00);
 
-        alarm.check();
-
-        assertFalse(alarm.isAlarmOn());
+        spyAlarm.check();
+        //THEN
+        assertFalse(spyAlarm.isAlarmOn());
     }
     
 }
