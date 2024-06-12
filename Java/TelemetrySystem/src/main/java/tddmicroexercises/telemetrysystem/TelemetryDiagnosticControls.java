@@ -5,9 +5,10 @@ public class TelemetryDiagnosticControls {
     private final TelemetryClient telemetryClient;
     private String diagnosticInfo = "";
 
-    public TelemetryDiagnosticControls() {
-        telemetryClient = new TelemetryClient();
+    public TelemetryDiagnosticControls(TelemetryClient telemetryClient) {
+        this.telemetryClient = telemetryClient;
     }
+
 
     public String getDiagnosticInfo() {
         return diagnosticInfo;
@@ -22,11 +23,11 @@ public class TelemetryDiagnosticControls {
     private void disconnectAndReconnect() throws Exception {
         telemetryClient.disconnect();
         int retryLeft = 3;
-        while (!telemetryClient.getOnlineStatus() && retryLeft > 0) {
+        while (!telemetryClient.isConnected() && retryLeft > 0) {
             telemetryClient.connect(diagnosticChannelConnectionString);
             retryLeft--;
         }
-        if (!telemetryClient.getOnlineStatus()) {
+        if (!telemetryClient.isConnected()) {
             throw new Exception("Unable to connect.");
         }
     }

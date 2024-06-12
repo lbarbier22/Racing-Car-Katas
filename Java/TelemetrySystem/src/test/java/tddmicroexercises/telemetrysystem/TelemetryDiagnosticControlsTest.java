@@ -10,82 +10,49 @@ class TelemetryDiagnosticControlsTest {
 
     @BeforeEach
     void setUp() {
-        telemetryDiagnosticControls = new TelemetryDiagnosticControls();
+        TelemetryClient telemetryClient = new TelemetryClient();
+        telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
     }
 
     @Test
     void testCheckTransmissionSuccessfulConnection() throws Exception {
+        // Act
+        telemetryDiagnosticControls.checkTransmission();
+
+        // Assert
+        assertNotNull(telemetryDiagnosticControls.getDiagnosticInfo());
+        assertFalse(telemetryDiagnosticControls.getDiagnosticInfo().isEmpty());
+    }
+
+    @Test
+    void testCheckTransmissionReceivesRandomSequence() throws Exception {
         // Arrange
         TelemetryClient telemetryClient = new TelemetryClient() {
-            private boolean onlineStatus = true;
-
-            @Override
-            public boolean getOnlineStatus() {
-                return onlineStatus;
-            }
-
-            @Override
-            public void connect(String telemetryServerConnectionString) {
-                // Simulate connection logic
-            }
-
-            @Override
-            public void disconnect() {
-                // Simulate disconnection logic
-            }
-
-            @Override
-            public void send(String message) {
-                // Simulate sending message
-            }
-
             @Override
             public String receive() {
-                return "Diagnostic message response";
+                return "Random sequence";
             }
         };
-        telemetryDiagnosticControls.setTelemetryClient(telemetryClient);
+        telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
 
         // Act
         telemetryDiagnosticControls.checkTransmission();
 
         // Assert
-        assertEquals("Diagnostic message response", telemetryDiagnosticControls.getDiagnosticInfo());
+        assertEquals("Random sequence", telemetryDiagnosticControls.getDiagnosticInfo());
     }
+
 
     @Test
     void testCheckTransmissionFailedConnection() {
         // Arrange
         TelemetryClient telemetryClient = new TelemetryClient() {
-            private boolean onlineStatus = false;
-
             @Override
-            public boolean getOnlineStatus() {
-                return onlineStatus;
-            }
-
-            @Override
-            public void connect(String telemetryServerConnectionString) {
-                // Simulate connection logic
-            }
-
-            @Override
-            public void disconnect() {
-                // Simulate disconnection logic
-            }
-
-            @Override
-            public void send(String message) {
-                // Simulate sending message
-            }
-
-            @Override
-            public String receive() {
-                // Simulate receiving message
-                return "";
+            public void connect(String connectionString) {
+                // Simulate failed connection
             }
         };
-        telemetryDiagnosticControls.setTelemetryClient(telemetryClient);
+        telemetryDiagnosticControls = new TelemetryDiagnosticControls(telemetryClient);
 
         // Act & Assert
         Exception exception = assertThrows(Exception.class, () -> {
@@ -93,45 +60,5 @@ class TelemetryDiagnosticControlsTest {
         });
 
         assertEquals("Unable to connect.", exception.getMessage());
-    }
-
-    @Test
-    void testCheckTransmissionReceivesRandomSequence() throws Exception {
-        // Arrange
-        TelemetryClient telemetryClient = new TelemetryClient() {
-            private boolean onlineStatus = true;
-
-            @Override
-            public boolean getOnlineStatus() {
-                return onlineStatus;
-            }
-
-            @Override
-            public void connect(String telemetryServerConnectionString) {
-                // Simulate connection logic
-            }
-
-            @Override
-            public void disconnect() {
-                // Simulate disconnection logic
-            }
-
-            @Override
-            public void send(String message) {
-                // Simulate sending message
-            }
-
-            @Override
-            public String receive() {
-                return "Random sequence";
-            }
-        };
-        telemetryDiagnosticControls.setTelemetryClient(telemetryClient);
-
-        // Act
-        telemetryDiagnosticControls.checkTransmission();
-
-        // Assert
-        assertEquals("Random sequence", telemetryDiagnosticControls.getDiagnosticInfo());
     }
 }

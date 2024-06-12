@@ -8,6 +8,10 @@ public class TelemetryClient {
     private String diagnosticMessageResult = "";
     private final Random connectionEventsSimulator = new Random(42);
 
+    public boolean isConnected() {
+        return onlineStatus;
+    }
+
     public void connect(String connectionString) {
         simulateConnection();
     }
