@@ -1,6 +1,7 @@
 package tddmicroexercises.turnticketdispenser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tddmicroexercises.turnticketdispenser.TurnNumberSequence.turnNumber;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ class TicketDispenserTest {
     @BeforeEach
     void init(){
         dispenser = new TicketDispenser();
+        turnNumber = 0;
     }
 
     @Test
