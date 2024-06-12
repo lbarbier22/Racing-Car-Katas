@@ -12,15 +12,13 @@ import static org.mockito.Mockito.when;
 
 public class AlarmTest {
 
-    @InjectMocks
     Sensor mockSensor = mock(Sensor.class);
 
-    @Spy
-    Alarm spyAlarm = new Alarm(mockSensor);
+    Alarm spyAlarm;
 
     @BeforeEach
     void init(){
-
+        spyAlarm = new Alarm(mockSensor);
     }
 
     @Test
