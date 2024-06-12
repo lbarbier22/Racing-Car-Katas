@@ -18,6 +18,12 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>3.12.4</version> <!-- Version actuelle de Mockito -->
+        <scope>test</scope> <!-- Mockito est généralement utilisé uniquement pour les tests -->
+    </dependency>
 	</dependencies>
 
 </project>
